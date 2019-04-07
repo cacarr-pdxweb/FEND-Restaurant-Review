@@ -1,8 +1,20 @@
+if ('serviceWorker' in navigator) {
+  console.log('ServiceWorker: Supported');
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(() => {
+      console.log('ServiceWorker: Registered');
+    }).catch(() => {
+      console.log('ServiceWorker: Failed to register');
+    });
+}
+
+
 let restaurants,
   neighborhoods,
   cuisines
-var map
-var markers = []
+var map;
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -178,4 +190,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     });
     self.markers.push(marker);
   });
-}
+};
+
+/* service worker registration */
+
