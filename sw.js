@@ -1,3 +1,5 @@
+//// I was considerably helped by the service worker primers at developers.google.com
+
 //// files to be cached
 const urlsToCache = [
     '/',
