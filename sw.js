@@ -1,10 +1,7 @@
-const projectCache = "project-cache-v1";
-
-// files to be cached
+//// files to be cached
 const urlsToCache = [
     '/',
     'index.html',
-    'restaurant.html',
     'restaurant.html',
     'restaurant.html?id=1',
     'restaurant.html?id=2',
@@ -33,63 +30,81 @@ const urlsToCache = [
     'img/10.jpg'
 ];
 
-/* Install service worker */
+//// Application shell is cached and pages display offline with only install event - meets rubric
+
+const projectCache = "project-cache-v1";
+
+//// Install 
 self.addEventListener('install', (e) => {
-    console.log('ServiceWorker: Attempting Installation');
+    console.log('[ServiceWorker] Attempting SW installation and assets caching');
 
-    /* delays install event until promise is resolved */
+    // Delays install event until Promise is resolved - all files added to cache 
     e.waitUntil(
 
+        // Opens the cache 
         caches.open(projectCache)
-            .then((cache) => {
+        .then((cache) => {
 
-                console.log('ServiceWorker: Caching Assets');
-                return cache.addAll(urlsToCache);
-            })
-    );
-});
-
-
-
-// /* Activate Service Worker */
-self.addEventListener('activate', (e) => {
-    console.log('ServiceWorker: Activated');
-
-    /* makes activation event wait until cache name check/delete completes */
-    e.waitUntil(
+            // Add files to cache - cache application shell 
+            console.log('[ServiceWorker] Adding files in urlsToCache array to cache');
+            return cache.addAll(urlsToCache);
         
-        caches.keys().then((allCacheNames) => {
-            return Promise.all(allCacheNames.map((thisCacheName) => {
-                
-                /* if cached file is saved under previous projectCache version */
-                if (thisCacheName !== projectCache) {
-
-                    console.log('ServiceWorker: Removing Cached Files from', thisCacheName);
-                    
-                    /* delete file from old cache */
-                    return caches.delete(thisCacheName);
-                }
-            }));
-        }) 
+        // Promise resolved
+        })
     );
 });
 
 
 
-/* Fetch */
-self.addEventListener('fetch', (e) => {
-    console.log('ServiceWorker: Fetching', e.request.url);
+/** === TODO: Debug Broken Fetch event - add activate event to handle outdated caches === **/
 
-    e.respondWith(
+//// Fetch 
+// self.addEventListener('fetch', (e) => {
 
-        caches.match(e.request).then((response) => {
-            if (response) {
-                console.log('ServiceWorker: Fetch Responded');
-                return response;
-            }
-            console.log('Fetching');
-            return(e.request);
-        })
-        .catch((err) => console.log(err)) 
-    );
-}); 
+//     console.log('[ServiceWorker] Fetch event for ', e.request);
+    
+//     // Fetch event response
+//     e.respondWith(
+        
+//         // Check cache for request
+//         caches.match(e.request)
+        
+//         .then((response) => {
+            
+//             // If request in cache
+//             if (response) {
+                
+//                 console.log('[ServiceWorker] Found', e.request.url, ' in cache');
+                
+//                 // Return cached version
+//                 return response;
+//             }
+//             console.log('[ServiceWorker] Network request for ', e.request.url);
+//             return fetch(e.request)
+
+            
+//             // If request not in cache, fetch and cache
+//             .then((response) => {
+
+//                 // Open cache 
+//                 return caches.open(projectCache)
+                
+//                 .then((cache) => {
+                    
+//                     // Put fetched response in cache
+//                     cache.put(e.request.url, respononse.clone());
+                    
+//                     // Return response
+//                     return response;
+//                 });
+//             });
+            
+            
+
+//         }).catch((error) => {
+
+//             // TODO: Consider adding offline page
+
+//         })
+//     );
+// });

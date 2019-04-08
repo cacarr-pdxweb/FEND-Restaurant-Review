@@ -1,11 +1,11 @@
 if ('serviceWorker' in navigator) {
-  console.log('ServiceWorker: Supported');
   navigator.serviceWorker
     .register('/sw.js')
     .then(() => {
       console.log('ServiceWorker: Registered');
-    }).catch(() => {
-      console.log('ServiceWorker: Failed to register');
+    })
+    .catch((err) => {
+      console.log('ServiceWorker: Failed to register', err);
     });
 }
 
