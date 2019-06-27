@@ -38,7 +38,7 @@ const projectCache = "project-cache-v1";
 
 //// Install 
 self.addEventListener('install', (e) => {
-    console.log('[ServiceWorker] Attempting SW installation and assets caching');
+    // console.log('[ServiceWorker] Attempting SW installation and assets caching');
 
     // Delays install event until Promise is resolved - all files added to cache 
     e.waitUntil(
@@ -75,7 +75,7 @@ self.addEventListener('fetch', (e) => {
                 // If request in cache
                 if (response) {
 
-                    console.log('[ServiceWorker] Found', e.request.url, ' in cache');
+                    // console.log('[ServiceWorker] Found', e.request.url, ' in cache');
 
                     // Return cached version
                     return response;
