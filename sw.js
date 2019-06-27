@@ -60,55 +60,55 @@ self.addEventListener('install', (e) => {
 
 /** === TODO: Debug Broken Fetch event - add activate event to handle outdated caches === **/
 
-//// Fetch 
-// self.addEventListener('fetch', (e) => {
+// Fetch 
+self.addEventListener('fetch', (e) => {
 
-//     console.log('[ServiceWorker] Fetch event for ', e.request);
+    console.log('[ServiceWorker] Fetch event for ', e.request);
     
-//     // Fetch event response
-//     e.respondWith(
+    // Fetch event response
+    e.respondWith(
         
-//         // Check cache for request
-//         caches.match(e.request)
+        // Check cache for request
+        caches.match(e.request)
         
-//         .then((response) => {
+        .then((response) => {
             
-//             // If request in cache
-//             if (response) {
+            // If request in cache
+            if (response) {
                 
-//                 console.log('[ServiceWorker] Found', e.request.url, ' in cache');
+                console.log('[ServiceWorker] Found', e.request.url, ' in cache');
                 
-//                 // Return cached version
-//                 return response;
-//             }
-//             console.log('[ServiceWorker] Network request for ', e.request.url);
-//             return fetch(e.request)
+                // Return cached version
+                return response;
+            }
+            console.log('[ServiceWorker] Network request for ', e.request.url);
+            return fetch(e.request)
 
             
-//             // If request not in cache, fetch and cache
-//             .then((response) => {
+            // If request not in cache, fetch and cache
+            .then((response) => {
 
-//                 // Open cache 
-//                 return caches.open(projectCache)
+                // Open cache 
+                return caches.open(projectCache)
                 
-//                 .then((cache) => {
+                .then((cache) => {
                     
-//                     // Put fetched response in cache
-//                     cache.put(e.request.url, respononse.clone());
+                    // Put fetched response in cache
+                    cache.put(e.request.url, respononse.clone());
                     
-//                     // Return response
-//                     return response;
-//                 });
-//             });
+                    // Return response
+                    return response;
+                });
+            });
             
             
 
-//         }).catch((error) => {
+        }).catch((error) => {
 
-//             // TODO: Consider adding offline page
+            // TODO: Consider adding offline page
 
-//         })
-//     );
-// });
+        })
+    );
+}); 
 
 

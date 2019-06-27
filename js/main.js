@@ -12,7 +12,7 @@ if ('serviceWorker' in navigator) {
 
 let restaurants,
   neighborhoods,
-  cuisines
+  cuisines;
 var map;
 var markers = [];
 
