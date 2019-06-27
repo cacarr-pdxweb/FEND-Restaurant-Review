@@ -62,7 +62,7 @@ self.addEventListener('install', (e) => {
 // Fetch 
 self.addEventListener('fetch', (e) => {
 
-    console.log('[ServiceWorker] Fetch event for ', e.request);
+    // console.log('[ServiceWorker] Fetch event for ', e.request);
 
     // Fetch event response
     e.respondWith(
@@ -80,7 +80,7 @@ self.addEventListener('fetch', (e) => {
                     // Return cached version
                     return response;
                 }
-                console.log('[ServiceWorker] Network request for ', e.request.url);
+                // console.log('[ServiceWorker] Network request for ', e.request.url);
                 return fetch(e.request)
 
 
