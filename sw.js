@@ -5,16 +5,16 @@ const urlsToCache = [
     '/',
     'index.html',
     'restaurant.html',
-    'restaurant.html?id=1',
-    'restaurant.html?id=2',
-    'restaurant.html?id=3',
-    'restaurant.html?id=4',
-    'restaurant.html?id=5',
-    'restaurant.html?id=6',
-    'restaurant.html?id=7',
-    'restaurant.html?id=8',
-    'restaurant.html?id=9',
-    'restaurant.html?id=10',
+    // 'restaurant.html?id=1',
+    // 'restaurant.html?id=2',
+    // 'restaurant.html?id=3',
+    // 'restaurant.html?id=4',
+    // 'restaurant.html?id=5',
+    // 'restaurant.html?id=6',
+    // 'restaurant.html?id=7',
+    // 'restaurant.html?id=8',
+    // 'restaurant.html?id=9',
+    // 'restaurant.html?id=10',
     'css/styles.css',
     'js/main.js',
     'js/dbhelper.js',
@@ -32,13 +32,11 @@ const urlsToCache = [
     'img/10.jpg'
 ];
 
-//// Application shell is cached and pages display offline 
-
 const projectCache = "project-cache-v1";
 
 //// Install 
 self.addEventListener('install', (e) => {
-    // console.log('[ServiceWorker] Attempting SW installation and assets caching');
+    console.log('[ServiceWorker] Attempting SW installation and assets caching');
 
     // Delays install event until Promise is resolved - all files added to cache 
     e.waitUntil(
@@ -57,57 +55,36 @@ self.addEventListener('install', (e) => {
 });
 
 
-/** === TODO: add activate event to handle outdated caches === **/
+//// Activate
+self.addEventListener('activate', (e) => {
+    
+    e.waitUntil(
+        caches.keys()
+            .then((cacheNames) => {
+                return Promise.all(
+                    cacheNames.filter((cacheName) => {
+                        return cacheName.startsWith('project-') &&
+                            cacheName != projectCache;
+                    }).map((cacheName) => {
+                        return caches.delete(cacheName);
+                    })
+                );
+            })
+    );
+});
 
-// Fetch 
+
+//// Fetch
 self.addEventListener('fetch', (e) => {
 
-    // console.log('[ServiceWorker] Fetch event for ', e.request);
-
-    // Fetch event response
     e.respondWith(
 
-        // Check cache for request
         caches.match(e.request)
 
             .then((response) => {
 
-                // If request in cache
-                if (response) {
-
-                    // console.log('[ServiceWorker] Found', e.request.url, ' in cache');
-
-                    // Return cached version
-                    return response;
-                }
-                // console.log('[ServiceWorker] Network request for ', e.request.url);
-                return fetch(e.request)
-
-
-                    // If request not in cache, fetch and cache
-                    .then((response) => {
-
-                        // Open cache 
-                        return caches.open(projectCache)
-
-                            .then((cache) => {
-
-                                // Put fetched response in cache
-                                cache.put(e.request.url, respononse.clone());
-
-                                // Return response
-                                return response;
-                            });
-                    });
-
-
-
-            }).catch((error) => {
-
-                // TODO: Consider adding offline page
-
+                return response || fetch(e.request);
             })
     );
-}); 
-
+});
 
