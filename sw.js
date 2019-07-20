@@ -54,6 +54,19 @@ self.addEventListener('install', (e) => {
     );
 });
 
+//// Fetch
+self.addEventListener('fetch', (e) => {
+
+    e.respondWith(
+
+        caches.match(e.request)
+
+            .then((response) => {
+
+                return response || fetch(e.request);
+            })
+    );
+});
 
 //// Activate
 self.addEventListener('activate', (e) => {
@@ -74,17 +87,5 @@ self.addEventListener('activate', (e) => {
 });
 
 
-//// Fetch
-self.addEventListener('fetch', (e) => {
 
-    e.respondWith(
-
-        caches.match(e.request)
-
-            .then((response) => {
-
-                return response || fetch(e.request);
-            })
-    );
-});
 
